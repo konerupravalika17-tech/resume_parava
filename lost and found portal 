@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LOST & FOUND PORTAL</title>
+<style>
+  /* Reset */
+  * { box-sizing: border-box; font-family: "Segoe UI", Tahoma, sans-serif; margin:0; padding:0; }
+
+  body {
+    background: linear-gradient(135deg, #74ebd5, #9face6);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #2c3e50;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  nav {
+    margin-top: 10px;
+  }
+
+  nav a {
+    color: #fff;
+    margin: 0 12px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+
+  nav a:hover {
+    color: #f1c40f;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: rgba(255,255,255,0.9);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    animation: fadeIn 0.7s ease;
+  }
+
+  .hidden { display:none; }
+
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: bold;
+  }
+
+  p {
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.1em;
+    color: #333;
+    font-weight: 500;
+  }
+
+  form label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+
+  form input, form textarea, button, #searchBox {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+  }
+
+  textarea { resize: none; }
+
+  button {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover { background: #2ecc71; }
+
+  #searchBox {
+    border: 2px solid #2980b9;
+    margin-bottom: 15px;
+  }
+
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+
+  .item-card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 6px solid #3498db;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+
+  .item-card:hover { transform: translateY(-5px); }
+
+  .item-card.lost { border-left-color: #e74c3c; }
+  .item-card.found { border-left-color: #27ae60; }
+
+  .item-card h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .item-card p { margin: 5px 0; color:#444; font-size: 0.95em; }
+
+  footer {
+    background: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+    margin-top: auto;
+    box-shadow: 0 -4px 8px rgba(0,0,0,0.2);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  Lost & Found Portal
+  <nav>
+    <a onclick="showSection('home')">Home</a>
+    <a onclick="showSection('lostFormSection')">Post Losted item </a>
+    <a onclick="showSection('foundFormSection')">Post Found item</a>
+    <a onclick="showSection('itemsSection')">View Items</a>
+  </nav>
+</header>
+
+<!-- Home -->
+<section id="home" class="container">
+  <h2>WELCOME</h2>
+  <p><b>This portal helps students report and find lost items easily.</b></p>
+  <p>Use the navigation above to get started.</p>
+</section>
+
+<!-- Lost Form -->
+<section id="lostFormSection" class="container hidden">
+  <h2>Report Lost Item</h2>
+  <form id="lostForm">
+    <label>Item Name:<input type="text" id="lostName" required></label>
+    <label>Description:<textarea id="lostDesc" required></textarea></label>
+    <label>Location Lost:<input type="text" id="lostLocation" required></label>
+    <label>Contact Info:<input type="text" id="lostContact" required></label>
+    <button type="submit">Submit Lost Item</button>
+  </form>
+</section>
+
+<!-- Found Form -->
+<section id="foundFormSection" class="container hidden">
+  <h2>Report Found Item</h2>
+  <form id="foundForm">
+    <label>Item Name:<input type="text" id="foundName" required></label>
+    <label>Description:<textarea id="foundDesc" required></textarea></label>
+    <label>Location Found:<input type="text" id="foundLocation" required></label>
+    <label>Contact Info:<input type="text" id="foundContact" required></label>
+    <button type="submit">Submit Found Item</button>
+  </form>
+</section>
+
+<!-- View Items -->
+<section id="itemsSection" class="container hidden">
+  <h2>All Reported Items</h2>
+  <input type="text" id="searchBox" placeholder="🔍 Search items...">
+  <div id="itemsList" class="items-grid"></div>
+</section>
+
+<footer>By Pravalika k (Lost & Found Portal) </footer>
+
+<script>
+  // Switch visible section
+  function showSection(id){
+    document.querySelectorAll("section").forEach(sec=>sec.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  // Retrieve stored data
+  let lostItems = JSON.parse(localStorage.getItem("lostItems")) || [];
+  let foundItems = JSON.parse(localStorage.getItem("foundItems")) || [];
+
+  // Lost form handling
+  document.getElementById("lostForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const item = {
+      type:"Lost",
+      name:document.getElementById("lostName").value,
+      desc:document.getElementById("lostDesc").value,
+      location:document.getElementById("lostLocation").value,
+      contact:document.getElementById("lostContact").value,
+      date:new Date().toLocaleDateString()
+    };
+    lostItems.push(item);
+    localStorage.setItem("lostItems", JSON.stringify(lostItems));
+    alert("✅ Lost item reported!");
+    e.target.reset();
+    showSection('itemsSection');
+    displayItems();
+  });
+
+  // Found form handling
+  document.getElementById("foundForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const item = {
+      type:"Found",
+      name:document.getElementById("foundName").value,
+      desc:document.getElementById("foundDesc").value,
+      location:document.getElementById("foundLocation").value,
+      contact:document.getElementById("foundContact").value,
+      date:new Date().toLocaleDateString()
+    };
+    foundItems.push(item);
+    localStorage.setItem("foundItems", JSON.stringify(foundItems));
+    alert("✅ Found item reported!");
+    e.target.reset();
+    showSection('itemsSection');
+    displayItems();
+  });
+
+  // Display items
+  const itemsList = document.getElementById("itemsList");
+  const searchBox = document.getElementById("searchBox");
+
+  function displayItems(filter=""){
+    const allItems = [...lostItems, ...foundItems];
+    itemsList.innerHTML = "";
+    allItems
+      .filter(i=>i.name.toLowerCase().includes(filter.toLowerCase()))
+      .forEach(item=>{
+        const card = document.createElement("div");
+        card.className = `item-card ${item.type.toLowerCase()}`;
+        card.innerHTML = `
+          <h3>${item.type}: <b>${item.name}</b></h3>
+          <p><strong>Description:</strong> ${item.desc}</p>
+          <p><strong>Location:</strong> ${item.location}</p>
+          <p><strong>Date:</strong> ${item.date}</p>
+          <p><strong>Contact:</strong> ${item.contact}</p>
+        `;
+        itemsList.appendChild(card);
+      });
+  }
+
+  searchBox.addEventListener("input", e=>displayItems(e.target.value));
+
+  // Show home on load
+  showSection('home');
+  displayItems();
+</script>
+</body>
+</html>
